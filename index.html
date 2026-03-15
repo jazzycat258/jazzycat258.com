@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jazzycat258</title>
+  <style>
+    body {
+      background: #fff;
+      color: #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      max-width: 580px;
+      margin: 40px auto;
+      padding: 0 20px 80px 20px;
+      line-height: 1.6;
+    }
+
+    a { color: #0000ee; }
+    a:visited { color: #551a8b; }
+
+    h1 { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+    h2 { font-size: 17px; font-weight: bold; margin-bottom: 6px; }
+    p { margin-bottom: 12px; }
+
+    hr {
+      border: none;
+      border-top: 1px solid #000;
+      margin: 30px 0;
+    }
+
+    nav { margin: 40px 0 10px 0; }
+    nav a { margin-right: 14px; }
+
+    .date { font-size: 13px; color: #555; margin-bottom: 6px; }
+
+    .entry { margin-bottom: 24px; }
+
+    .section-head {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      margin-top: 48px;
+    }
+
+    ul { padding-left: 20px; margin-bottom: 16px; }
+    li { margin-bottom: 6px; font-size: 15px; }
+
+    .now-label {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      margin-top: 24px;
+    }
+
+    /* I Have Answers */
+    .answers-section { margin-top: 48px; margin-bottom: 48px; }
+
+    #answer-input {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 15px;
+      width: 100%;
+      border: 1px solid #000;
+      padding: 8px 10px;
+      box-sizing: border-box;
+      outline: none;
+      resize: none;
+      min-height: 36px;
+    }
+
+    #answer-display {
+      margin-top: 10px;
+      font-size: 15px;
+      min-height: 24px;
+    }
+
+    .inventions-list { list-style: none; padding-left: 0; }
+    .inventions-list li { margin-bottom: 4px; }
+    .inventions-list li::before { content: "— "; }
+
+    /* Posts */
+    .post-full { display: none; }
+    .post-full.active { display: block; }
+    .index-view.hidden { display: none; }
+
+    /* Sandbox */
+    #sandbox-view {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #fff;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    #sandbox-view.active { display: block; }
+
+    .sandbox-star {
+      position: absolute;
+      cursor: move;
+      font-size: 28px;
+      user-select: none;
+      line-height: 1;
+    }
+
+    #gravity-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 22px;
+      background: none;
+      border: 1px solid #000;
+      padding: 4px 14px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    #sandbox-back {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      z-index: 1001;
+      cursor: pointer;
+      color: #0000ee;
+      text-decoration: underline;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════ INDEX ════════════════════════ -->
+  <div class="index-view" id="index">
+
+    <p style="font-size:14px; color:#555; margin-bottom:6px;">
+      Yayyyyyy — <a href="https://www.instagram.com/jazzycat258/" target="_blank">me</a>
+    </p>
+
+    <!-- ── POSTS ── -->
+    <div class="entry">
+      <div class="date">December 1, 2025</div>
+      <h2><a href="#" onclick="openPost('post-2025-12-01'); return false;">The sun is good for you / my day thus far / morning routine</a></h2>
+    </div>
+
+    <div class="entry">
+      <div class="date">October 1, 2023</div>
+      <h2><a href="#" onclick="openPost('post-2023-10-01'); return false;">2023-10-01</a></h2>
+    </div>
+
+    <!-- ── NOW ── -->
+    <div class="section-head" id="now">Now</div>
+
+    <div class="now-label">Reading</div>
+    <ul>
+      <li><a href="#">Fear and Loathing in Las Vegas</a> — Hunter S. Thompson</li>
+      <li><a href="#">The Boy Who Was Raised as a Dog</a> — Dr. Bruce Perry</li>
+    </ul>
+
+    <div class="now-label">Listening</div>
+    <ul>
+      <li>FMA Track</li>
+      <li>The Stark Palace — CroMagnon Man</li>
+      <li>Polygamy Boys — Firenze (feat. Sabine)</li>
+      <li>Komorebi — Atomic Number Demo 3</li>
+      <li>Wooka — YeeesS</li>
+    </ul>
+
+    <!-- ── GREATEST INVENTIONS ── -->
+    <div class="section-head" id="inventions">Greatest Inventions</div>
+    <ul class="inventions-list">
+      <li>Fire</li>
+      <li>Beer</li>
+      <li>Lainabug</li>
+      <li>Smoke machines</li>
+      <li>Little Trees</li>
+    </ul>
+
+    <!-- ── I HAVE ANSWERS ── -->
+    <div class="answers-section" id="answers">
+      <div class="section-head" style="margin-top:0;">I Have Answers</div>
+      <input type="text" id="answer-input" placeholder="Ask" autocomplete="off" />
+      <div id="answer-display"></div>
+    </div>
+
+    <!-- ── COMMENTS ── -->
+    <div class="section-head" id="comments" style="margin-top:48px;">Comments</div>
+    <script src="https://utteranc.es/client.js"
+      repo="YOUR_GITHUB_USERNAME/YOUR_REPO_NAME"
+      issue-term="pathname"
+      label="comments"
+      theme="github-light"
+      crossorigin="anonymous"
+      async>
+    </script>
+
+    <nav>
+      <a href="#now">Now</a>
+      <a href="#inventions">Greatest Inventions</a>
+      <a href="#answers">I Have Answers</a>
+      <a href="#" onclick="openSandbox(); return false;">Sandbox</a>
+    </nav>
+
+  </div><!-- /index -->
+
+
+  <!-- ════════════════════════ POSTS ════════════════════════ -->
+
+  <!-- December 1, 2025 -->
+  <div class="post-full" id="post-2025-12-01">
+    <hr>
+    <p>wake up</p>
+    <p>In the past two days, 5 am briefly. Phone time. Sleep. Wake. ~9/10 am. Water my plants.</p>
+    <p>Go downstairs and make coffee.</p>
+    <p>Today, iced blonde espresso with honey</p>
+    <p>If no one's home: Bluetooth on #bumpin</p>
+    <p>have apple/Costco breakfast burrito</p>
+    <p>instagram</p>
+    <p>twitter</p>
+    <p>sit on my balcony</p>
+    <p>Use my laptop</p>
+    <p>Talk to a friend</p>
+    <p>Look at the train track</p>
+    <p>Look beyond the train track</p>
+    <p>think about ██████</p>
+    <p>think about getting a tattoo</p>
+    <p>think you are ████ ██████</p>
+    <p>Whatever</p>
+    <p>It's 11 am, and I need to leave the house by 12. I'm mostly packed. My suitcase has been in the same spot for days.</p>
+    <p>At 11:20, I will get off my phone and my laptop, and I'll actually get ready and leave.</p>
+    <p>but first, I will finish my coffee and my burrito, maybe think bout how much I've talked to ██████</p>
+    <p>–</p>
+    <br>
+    <a href="#" onclick="showIndex(); return false;">← Back</a>
+  </div>
+
+  <!-- October 1, 2023 -->
+  <div class="post-full" id="post-2023-10-01">
+    <p><a href="https://youtu.be/HTyIGNXeFsY?si=BFrhl7cxNvNVwlz0" target="_blank">https://youtu.be/HTyIGNXeFsY?si=BFrhl7cxNvNVwlz0</a></p>
+    <br>
+    <a href="#" onclick="showIndex(); return false;">← Back</a>
+  </div>
+
+
+  <!-- ════════════════════════ SANDBOX ════════════════════════ -->
+  <div id="sandbox-view">
+    <button id="sandbox-back" onclick="closeSandbox()">← back</button>
+    <button id="gravity-btn" onclick="toggleGravity()">↓</button>
+  </div>
+
+
+  <script>
+    // ── I Have Answers ──
+    const messages = [
+      "A worthwhile relationship isn't made up of two halves, but two wholes.",
+      "You are ready to embark on a quest. It will be a lonely lonely adventure.",
+      "You are the most elaborate and sweet dessert.",
+      "The message sent is not necessarily the message received.",
+      "Because in 799 Charlemagne helped pope leo 3 crush a rebellion in Rome.",
+      "Kanye West.",
+      "I don't really have the answers.",
+      "Stop asking questions that only your neighbor can answer.",
+      "being high.",
+      "It's never ok for someone to put you down.",
+      "Delayed gratification now will reap you greater rewards later.",
+      "You're averaging fewer steps a day this year than last year.",
+      "Book with American.",
+      "normalize going to medieval times with your friends on a random tuesday night for dinner.",
+      "Frequency of Evening Activities.",
+      "Ya gooch.",
+      "DONT LEAVE HER ON READ.",
+      "You must learn more about the problem you are trying to solve and also what testing has already been done.",
+      "Some ppl would find it disrespectful bc fajitas are usually the first to be ready and arrive at the table, and its one of those foods that commands attention.",
+      "Giving it all for the one you love is the best way to make sure you get it all back.",
+      "Damn it's been a FANTASTIC day.",
+      "Curse is lifted.",
+      "Am I capable of anything?",
+      "oh hell nah.",
+    ];
+
+    const answerInput = document.getElementById('answer-input');
+    const answerDisplay = document.getElementById('answer-display');
+
+    answerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        answerDisplay.textContent = messages[Math.floor(Math.random() * messages.length)];
+      }
+    });
+
+    // ── Post navigation ──
+    function showIndex() {
+      document.getElementById('index').classList.remove('hidden');
+      document.querySelectorAll('.post-full').forEach(p => p.classList.remove('active'));
+      window.scrollTo(0, 0);
+    }
+
+    function openPost(id) {
+      document.getElementById('index').classList.add('hidden');
+      document.querySelectorAll('.post-full').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // ── Sandbox ──
+    const STAR_CHARS = ['★', '☆', '✦', '✧', '✩', '✪', '✫', '✬', '✭', '✮'];
+    const sandboxView = document.getElementById('sandbox-view');
+    let sandboxReady = false;
+    let isGravityOn = false;
+    let originalPositions = [];
+
+    function openSandbox() {
+      document.getElementById('index').classList.add('hidden');
+      sandboxView.classList.add('active');
+      if (!sandboxReady) {
+        buildStars();
+        sandboxReady = true;
+      }
+    }
+
+    function closeSandbox() {
+      sandboxView.classList.remove('active');
+      document.getElementById('index').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function buildStars() {
+      for (let i = 0; i < 30; i++) {
+        const star = document.createElement('div');
+        star.className = 'sandbox-star';
+        star.textContent = STAR_CHARS[Math.floor(Math.random() * STAR_CHARS.length)];
+        const x = Math.random() * (window.innerWidth - 40);
+        const y = Math.random() * (window.innerHeight - 80);
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        originalPositions.push({ x, y });
+        sandboxView.appendChild(star);
+        makeDraggable(star);
+      }
+    }
+
+    function makeDraggable(el) {
+      let dragging = false, ox = 0, oy = 0;
+      el.addEventListener('mousedown', e => {
+        dragging = true;
+        ox = e.clientX - el.getBoundingClientRect().left;
+        oy = e.clientY - el.getBoundingClientRect().top;
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        el.style.left = (e.clientX - ox) + 'px';
+        el.style.top  = (e.clientY - oy) + 'px';
+      });
+      document.addEventListener('mouseup', () => { dragging = false; });
+      el.addEventListener('touchstart', e => {
+        dragging = true;
+        ox = e.touches[0].clientX - el.getBoundingClientRect().left;
+        oy = e.touches[0].clientY - el.getBoundingClientRect().top;
+        e.preventDefault();
+      }, { passive: false });
+      document.addEventListener('touchmove', e => {
+        if (!dragging) return;
+        el.style.left = (e.touches[0].clientX - ox) + 'px';
+        el.style.top  = (e.touches[0].clientY - oy) + 'px';
+      }, { passive: false });
+      document.addEventListener('touchend', () => { dragging = false; });
+    }
+
+    function toggleGravity() {
+      const btn = document.getElementById('gravity-btn');
+      const stars = sandboxView.querySelectorAll('.sandbox-star');
+      if (!isGravityOn) {
+        btn.textContent = '↑';
+        stars.forEach((star, i) => {
+          const h = star.offsetHeight || 30;
+          setTimeout(() => {
+            star.style.transition = 'top 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53)';
+            star.style.top = (window.innerHeight - h - 50) + 'px';
+            setTimeout(() => {
+              star.style.transition = 'top 0.1s ease-out';
+              star.style.top = (window.innerHeight - h - 70) + 'px';
+              setTimeout(() => {
+                star.style.transition = 'top 0.08s ease-in';
+                star.style.top = (window.innerHeight - h - 50) + 'px';
+                setTimeout(() => { star.style.transition = ''; }, 80);
+              }, 100);
+            }, 400);
+          }, i * 40);
+        });
+        isGravityOn = true;
+      } else {
+        btn.textContent = '↓';
+        stars.forEach((star, i) => {
+          const orig = originalPositions[i];
+          setTimeout(() => {
+            star.style.transition = 'top 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            star.style.top = orig.y + 'px';
+            setTimeout(() => { star.style.transition = ''; }, 1200);
+          }, i * 25);
+        });
+        isGravityOn = false;
+      }
+    }
+  </script>
+
+</body>
+</html>
