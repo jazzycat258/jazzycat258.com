@@ -6177,7 +6177,7 @@ async function loadNewPosts(){
         const modalPosts=document.getElementById('modal-posts');
         posts.forEach(post=>{
           const pid='db-'+post.id;
-          if(document.querySelector(`.grid-item[data-pid="${pid}"]`))return;
+          if(document.querySelector(`.grid-item[data-pid="${pid}"]`))return;           // skip if archived           const isArchived=await sb(`post_overrides?post_id=eq.${post.id}&select=archived`);           if(isArchived&&isArchived[0]&&isArchived[0].archived)return;
           const urls=JSON.parse(post.image_url||'[]');
           if(!urls.length)return;
           // add to grid
