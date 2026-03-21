@@ -6275,13 +6275,12 @@ async function loadNewPosts(){
 
     // Feed
     function openFeed(){document.getElementById('index').classList.add('hidden');document.getElementById('feed-view').classList.add('active');document.getElementById('main-grid').style.opacity='0';loadInteractions().then(()=>{document.getElementById('main-grid').style.opacity='1';});loadNewPosts();}     function autoOpenFeed(){if(localStorage.getItem('lastView')==='feed')openFeed();}     function closeFeed(){document.getElementById('feed-view').classList.remove('active');document.getElementById('index').classList.remove('hidden');localStorage.removeItem('lastView');}
-    function closeFeed(){document.getElementById('feed-view').classList.remove('active');document.getElementById('index').classList.remove('hidden');}
     function showFeedTab(id){document.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('feed-view').scrollTo(0,0);}
 
     // Grid -> Post modal
     function openPost(pid){
       const modal=document.getElementById('post-modal');
-      modal.classList.add('active');
+      modal.classList.add('active');localStorage.setItem('lastView','feed');
       setTimeout(()=>{
         const el=document.getElementById('post-'+pid);
         if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
@@ -6629,6 +6628,7 @@ async function loadNewPosts(){
     function toggleDark(){document.body.classList.toggle('dark');document.getElementById('dark-btn').textContent=document.body.classList.contains('dark')?'Light':'Dark';localStorage.setItem('mode',document.body.classList.contains('dark')?'dark':'light');}
     if(localStorage.getItem('mode')==='dark'){document.body.classList.add('dark');document.getElementById('dark-btn').textContent='Light';}
     else{document.body.classList.remove('dark');document.getElementById('dark-btn').textContent='Dark';}
+                                      autoOpenFeed();
   </script>
 </body>
 </html>
