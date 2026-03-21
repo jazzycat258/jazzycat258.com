@@ -6108,7 +6108,7 @@ Today i was woken up by this man. Heâs wearing big loud as fuck boots and s
       return r.json();
     }
 
-    async function loadInteractions(){
+    async function loadInteractions(){       try{         const[likes,comments,overrides]=await Promise.all([           sb('likes?select=post_id'),           sb('comments?select=post_id,author,body,created_at&order=created_at.asc'),           sb('post_overrides?select=post_id,caption,filter,archived,music_url,music_title')         ]);
       try{
         const[likes,comments,overrides]=await Promise.all([
           sb('likes?select=post_id'),
