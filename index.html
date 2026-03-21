@@ -6521,14 +6521,37 @@ Today i was woken up by this man. Heâs wearing big loud as fuck boots and s
       const caption=document.getElementById('compose-caption').value.trim();
       const account=document.getElementById('compose-account').value;
       const status=document.getElementById('post-status');
-      status.textContent='Saving...';
+      status.textContent='Uploading photos...';
       try{
-        await sb('posts','POST',{username:account,caption,image_url:composePhotos.length?composePhotos[0].objectUrl:'',visibility:'public'});
-        status.textContent='Posted.';composePhotos=[];
+        const imageUrls=[];
+        for(let i=0;i<composePhotos.length;i++){
+          const p=composePhotos[i];
+          status.textContent='Uploading photo '+(i+1)+' of '+composePhotos.length+'...';
+          const canvas=document.createElement('canvas');
+          const img=new Image();
+          await new Promise(res=>{img.onload=res;img.src=p.objectUrl;});
+          canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+          const ctx=canvas.getContext('2d');
+          ctx.filter=buildFilterCSS(p);
+          ctx.drawImage(img,0,0);
+          const blob=await new Promise(res=>canvas.toBlob(res,'image/jpeg',0.9));
+          const filename=Date.now()+'_'+i+'.jpg';
+          const form=new FormData();
+          form.append('file',blob,filename);
+          form.append('filename',filename);
+          const r=await fetch('https://jazzycat-uploader.jazzycat258.workers.dev',{method:'POST',body:form});
+          const data=await r.json();
+          imageUrls.push(data.url);
+        }
+        status.textContent='Saving post...';
+        const pid='post-'+Date.now();
+        await sb('posts','POST',{username:account,caption,image_url:JSON.stringify(imageUrls),visibility:'public'});
+        status.textContent='Posted!';
+        composePhotos=[];
         document.getElementById('photo-thumbs').innerHTML='';
         document.getElementById('step1-next').style.display='none';
         setTimeout(()=>{status.textContent='';goToStep1();},1500);
-      }catch(e){status.textContent='Error. Try again.';}
+      }catch(e){console.log(e);status.textContent='Error. Try again.';}
     }
 
     // Dark mode
