@@ -6169,7 +6169,68 @@ Today i was woken up by this man. Heâs wearing big loud as fuck boots and s
         });
       }catch(e){console.log('sb err',e);}
     }
-
+async function loadNewPosts(){
+      try{
+        const posts=await sb('posts?select=id,username,caption,image_url,created_at&order=created_at.desc');
+        if(!posts||!posts.length)return;
+        const grid=document.getElementById('main-grid');
+        const modalPosts=document.getElementById('modal-posts');
+        posts.forEach(post=>{
+          const pid='db-'+post.id;
+          if(document.querySelector(`.grid-item[data-pid="${pid}"]`))return;
+          const urls=JSON.parse(post.image_url||'[]');
+          if(!urls.length)return;
+          // add to grid
+          const gridItem=document.createElement('div');
+          gridItem.className='grid-item';
+          gridItem.dataset.pid=pid;
+          gridItem.onclick=()=>openPost(pid);
+          const img=document.createElement('img');
+          img.src=urls[0];
+          gridItem.appendChild(img);
+          if(urls.length>1){const m=document.createElement('span');m.className='grid-multi';m.textContent='+';gridItem.appendChild(m);}
+          grid.insertBefore(gridItem,grid.firstChild);
+          // add to modal feed
+          const date=new Date(post.created_at).toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+          const imgsHtml=urls.map((u,i)=>`<img class="fpost-img${i===0?' active-img':''}" src="${u}" onclick="tapCarousel(event,this)" />`).join('');
+          const nav=urls.length>1?`<div class="fpost-nav"><span class="fpost-counter">1 / ${urls.length}</span></div>`:'';
+          const div=document.createElement('div');
+          div.className='fpost';
+          div.dataset.pid=pid;
+          div.id='post-'+pid;
+          div.innerHTML=`
+            <div class="fpost-header">
+              <span class="fpost-top">${post.username} &middot; ${date}</span>
+              <div class="post-menu-wrap admin-only">
+                <button class="post-menu-btn" onclick="togglePostMenu(this)">&#8943;</button>
+                <div class="post-menu">
+                  <button onclick="editCaption('${pid}')">Edit caption</button>
+                  <button onclick="blurPost(this)">Blur photo</button>
+                  <button onclick="pixelatePost(this)">Pixelate photo</button>
+                  <button onclick="unfilterPost(this)">Remove filter</button>
+                  <button onclick="archivePost('${pid}')">Archive</button>
+                </div>
+              </div>
+            </div>
+            <div class="fpost-carousel" style="position:relative;">${imgsHtml}</div>
+            ${nav}
+            <p class="fpost-caption" id="cap-${pid}">${post.caption||''}</p>
+            <div class="fpost-actions">
+              <button class="like-btn" onclick="toggleLike(this)">Like (<span class="like-count">0</span>)</button>
+              <button onclick="toggleFComments(this)">Comments (<span class="comment-count">0</span>)</button>
+              <button class="admin-only" onclick="openMusicPicker('${pid}')">+ Music</button>
+            </div>
+            <div class="fcomments">
+              <div class="comments-list"></div>
+              <div class="fcomment-form">
+                <input type="text" placeholder="Write a comment" />
+                <button onclick="postFComment(this)">Post</button>
+              </div>
+            </div>`;
+          modalPosts.insertBefore(div,modalPosts.firstChild);
+        });
+      }catch(e){console.log('loadNewPosts err',e);}
+    }
     async function saveOverride(pid, fields){
       // upsert into post_overrides
       try{
