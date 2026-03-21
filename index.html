@@ -6404,6 +6404,16 @@ async function loadNewPosts(){
     }
 
     // Archive
+    function deletePost(pid){
+      if(!confirm('Permanently delete this post?'))return;
+      const post=document.getElementById('post-'+pid);
+      const gridItem=document.querySelector(`.grid-item[data-pid="${pid}"]`);
+      if(post)post.remove();
+      if(gridItem)gridItem.remove();
+      sb('posts?id=eq.'+pid.replace('db-',''),'DELETE').catch(()=>{});
+      saveOverride(pid,{archived:true});
+      document.querySelectorAll('.post-menu.open').forEach(m=>m.classList.remove('open'));
+    }
     function archivePost(pid){
       const post=document.getElementById('post-'+pid);
       const gridItem=document.querySelector(`.grid-item[data-pid="${pid}"]`);
